@@ -1,5 +1,5 @@
-class Statement
-  def self.format(transactions, balance)
+module Statement
+  def Statement.format(transactions, balance)
     return 'Statement unavailable: no transactions have occured' if transactions.empty?
 
     statement = ["date || credit || debit || balance"]

@@ -11,4 +11,10 @@ RSpec.describe Deposit do
       expect(subject.balance_after(400)).to eq 500
     end
   end
+
+  describe "#balance_before" do
+    it "should return the balance before the transaction" do
+      expect(subject.balance_before(500)).to eq 400
+    end
+  end
 end

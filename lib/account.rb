@@ -12,6 +12,11 @@ class Account
     @balance += amount
   end
 
+  def withdraw amount
+    @transactions.unshift @transaction_class.new(:withdrawal, amount, Time.now)
+    @balance -= amount
+  end
+
   def statement
     @statement_formatter.format(@transactions, @balance)
   end

@@ -17,4 +17,10 @@ RSpec.describe Withdrawal do
       expect(subject.balance_before(300)).to eq 400
     end
   end
+
+  describe "#type" do
+    it "should return withdrawal" do
+      expect(subject.type).to eq :withdrawal
+    end
+  end
 end

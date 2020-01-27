@@ -16,7 +16,12 @@ class Statement
 
     def handle_transaction(transaction, balance)
       line = transaction.date.strftime('%d/%m/%Y || ')
-      line << "%.2f || || %.2f" % [transaction.amount, balance]
+      case transaction.type
+      when :deposit
+        line << "%.2f || || %.2f" % [transaction.amount, balance]
+      when :withdrawal
+        line << "|| %.2f || %.2f" % [transaction.amount, balance]
+      end
     end
   end
 end

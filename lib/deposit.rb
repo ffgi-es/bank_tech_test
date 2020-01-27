@@ -8,4 +8,8 @@ class Deposit < Transaction
   def balance_before balance_after
     balance_after - self.amount
   end
+
+  def type
+    :deposit
+  end
 end

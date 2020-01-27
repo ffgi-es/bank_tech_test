@@ -17,4 +17,10 @@ RSpec.describe Deposit do
       expect(subject.balance_before(500)).to eq 400
     end
   end
+
+  describe "#type" do
+    it "should return :deposit" do
+      expect(subject.type).to eq :deposit
+    end
+  end
 end

@@ -9,4 +9,10 @@ RSpec.describe Transaction do
       expect(subject.amount).to eq 100
     end
   end
+
+  describe "#date" do
+    it "should return the date the transaction occured" do
+      expect(subject.date).to eq Time.parse("2019-06-13")
+    end
+  end
 end

@@ -4,10 +4,10 @@ class Statement
 
     statement = ["date || credit || debit || balance"]
 
-    transactions.reduce(statement) do |statement, transaction|
-      statement << handle_transaction(transaction, balance)
+    transactions.reduce(statement) do |lines, transaction|
+      lines << handle_transaction(transaction, balance)
       balance = transaction.balance_before(balance)
-      statement
+      lines
     end.join("\n")
   end
 
@@ -18,9 +18,9 @@ class Statement
       line = transaction.date.strftime('%d/%m/%Y || ')
       case transaction.type
       when :deposit
-        line << "%.2f || || %.2f" % [transaction.amount, balance]
+        line << "%<amt>.2f || || %<bal>.2f" % { amt: transaction.amount, bal: balance }
       when :withdrawal
-        line << "|| %.2f || %.2f" % [transaction.amount, balance]
+        line << "|| %<amt>.2f || %<bal>.2f" % { amt: transaction.amount, bal: balance }
       end
     end
   end

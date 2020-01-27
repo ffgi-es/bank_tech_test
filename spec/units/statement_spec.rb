@@ -3,15 +3,18 @@ require 'time'
 
 RSpec.describe Statement do
   describe ".format" do
-    let(:deposit_1) { double(:deposit_1, type: :deposit,
-                             amount: 1000, date: Time.parse('2019-05-03'),
-                             balance_before: 0) }
-    let(:deposit_2) { double(:deposit_2, type: :deposit,
-                             amount: 2000, date: Time.parse('2019-05-13'),
-                             balance_before: 1000) }
-    let(:withdrawal_1) { double(:withdrawal_1, type: :withdrawal,
-                                amount: 500, date: Time.parse('2019-05-14'),
-                                balance_before: 3000) }
+    let(:deposit_1) do
+      double(:deposit_1, type: :deposit, amount: 1000, date: Time.parse('2019-05-03'),
+             balance_before: 0)
+    end
+    let(:deposit_2) do
+      double(:deposit_2, type: :deposit, amount: 2000, date: Time.parse('2019-05-13'),
+             balance_before: 1000) 
+    end
+    let(:withdrawal_1) do
+      double(:withdrawal_1, type: :withdrawal, amount: 500, date: Time.parse('2019-05-14'),
+             balance_before: 3000) 
+    end
 
     it "should return no statement if no transactions have occured" do
       expect(Statement.format([], 0)).to eq 'Statement unavailable: no transactions have occured'

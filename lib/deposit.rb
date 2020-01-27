@@ -2,11 +2,11 @@ require_relative 'transaction'
 
 class Deposit < Transaction
   def balance_after balance_before
-    balance_before + self.amount
+    balance_before + amount
   end
 
   def balance_before balance_after
-    balance_after - self.amount
+    balance_after - amount
   end
 
   def type

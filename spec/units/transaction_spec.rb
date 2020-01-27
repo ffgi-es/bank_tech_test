@@ -1,5 +1,4 @@
 require 'transaction'
-require 'time'
 
 shared_examples 'a transaction' do
   describe '#amount' do
@@ -10,14 +9,14 @@ shared_examples 'a transaction' do
 
   describe '#date' do
     it 'should return the date the transaction occured' do
-      expect(subject.date).to eq Time.parse('2019-05-13')
+      expect(subject.date).to eq Time.local(2019, 05, 13)
     end
   end
 end
 
 RSpec.describe Transaction do
   describe ':deposit' do
-    subject { Transaction.new(:deposit, 100, Time.parse('2019-05-13')) }
+    subject { Transaction.new(:deposit, 100, Time.local(2019, 05, 13)) }
 
     it_behaves_like 'a transaction'
 
@@ -41,7 +40,7 @@ RSpec.describe Transaction do
   end
 
   describe ':withdrawal' do
-    subject { Transaction.new(:withdrawal, 100, Time.parse('2019-05-13')) }
+    subject { Transaction.new(:withdrawal, 100, Time.local(2019, 05, 13)) }
 
     it_behaves_like 'a transaction'
 

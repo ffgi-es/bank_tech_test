@@ -13,6 +13,8 @@ class Account
   end
 
   def withdraw amount
+    raise AccountError, "Insufficient funds" if @balance - amount < 0
+
     @transactions.unshift @transaction_class.new(:withdrawal, amount, Time.now)
     @balance -= amount
   end
@@ -20,4 +22,7 @@ class Account
   def statement
     @statement_formatter.format(@transactions, @balance)
   end
+end
+
+class AccountError < StandardError
 end

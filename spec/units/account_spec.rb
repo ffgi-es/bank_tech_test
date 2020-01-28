@@ -43,6 +43,10 @@ RSpec.describe Account do
       expect(transaction_class).to receive(:new).with(:withdrawal, 250, Time.local(2017, 07, 29))
       subject.withdraw(250)
     end
+
+    it "should raise an error if not enough money is available" do
+      expect { subject.withdraw(1301) }.to raise_error AccountError, "Insufficient funds"
+    end
   end
 
   describe '#statement' do

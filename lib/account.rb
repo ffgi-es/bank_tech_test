@@ -13,7 +13,7 @@ class Account
   end
 
   def withdraw amount
-    raise AccountError, "Insufficient funds" if @balance - amount < 0
+    raise AccountError, "Insufficient funds" if (@balance - amount).negative?
 
     @transactions.unshift @transaction_class.new(:withdrawal, amount, Time.now)
     @balance -= amount

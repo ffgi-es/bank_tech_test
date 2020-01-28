@@ -3,17 +3,17 @@ require 'statement'
 RSpec.describe Statement do
   describe ".format" do
     let(:deposit_1) do
-      double(:deposit_1, type: :deposit, amount: 1000,
+      double(:deposit_1, amount: 1000, credit: 1000, debit: nil,
              date: double(:time_1, strftime: '03/05/2019'),
              balance_before: 0)
     end
     let(:deposit_2) do
-      double(:deposit_2, type: :deposit, amount: 2000, 
+      double(:deposit_2, amount: 2000, credit: 2000, debit: nil,
              date: double(:time_2, strftime: '13/05/2019'),
              balance_before: 1000) 
     end
     let(:withdrawal_1) do
-      double(:withdrawal_1, type: :withdrawal, amount: 500, 
+      double(:withdrawal_1, amount: 500, debit: 500, credit: nil,
              date: double(:time_3, strftime: '14/05/2019'),
              balance_before: 3000) 
     end

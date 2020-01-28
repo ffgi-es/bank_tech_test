@@ -1,21 +1,23 @@
 require 'transaction_log'
 
 RSpec.describe TransactionLog do
-  let(:transaction) { double :transaction }
-  let(:transaction_class) { double :transaction_class, new: transaction }
+  let(:deposit) { double :deposit }
+  let(:deposit_class) { double :deposit_class, new: deposit }
+  let(:withdrawal) { double :withdrawal }
+  let(:withdrawal_class) { double :withdrawal_class, new: withdrawal }
   let(:time) { double :time }
   let(:time_class) { double :Time, now: time }
 
-  subject { TransactionLog.new(transaction_class, time_class) }
+  subject { TransactionLog.new(deposit_class, withdrawal_class, time_class) }
 
   describe '#add_deposit' do
     it 'should return a transaction' do
-      expect(subject.add_deposit 100).to eq transaction
+      expect(subject.add_deposit 100).to eq deposit
     end
 
     it "should pass the correct details to create a transaction" do
-      expect(transaction_class).to receive(:new)
-        .with(:deposit, 250, time)
+      expect(deposit_class).to receive(:new)
+        .with(250, time)
 
       subject.add_deposit(250)
     end
@@ -23,12 +25,12 @@ RSpec.describe TransactionLog do
 
   describe '#add_withdrawal' do
     it 'should return a transaction' do
-      expect(subject.add_withdrawal 100).to eq transaction
+      expect(subject.add_withdrawal 100).to eq withdrawal
     end
 
     it "should be creating a withdrawal" do
-      expect(transaction_class).to receive(:new)
-        .with(:withdrawal, 250, time)
+      expect(withdrawal_class).to receive(:new)
+        .with(250, time)
 
       subject.add_withdrawal(250)
     end
@@ -44,14 +46,26 @@ RSpec.describe TransactionLog do
       deposit_2 = double :deposit_2
       withdrawal_1 = double :withdrawal_1
       deposit_3 = double :deposit_3
+      withdrawal_2 = double :withdrawal_2
 
-      transactions = [deposit_1, deposit_2, withdrawal_1, deposit_3]
-        .each do |transaction|
-        allow(transaction_class).to receive(:new).and_return transaction
-        transaction == withdrawal_1 ? subject.add_withdrawal(100) : subject.add_deposit(100)
-      end
+      allow(deposit_class).to receive(:new).and_return(deposit_1, deposit_2, deposit_3)
+      allow(withdrawal_class).to receive(:new).and_return(withdrawal_1, withdrawal_2)
 
-      expect(subject.transactions).to eq transactions.reverse
+      subject.add_deposit 100
+      subject.add_deposit 200
+      subject.add_withdrawal 100
+      subject.add_deposit 300
+      subject.add_withdrawal 200
+
+      expected_array = [
+        withdrawal_2,
+        deposit_3,
+        withdrawal_1,
+        deposit_2,
+        deposit_1
+      ]
+
+      expect(subject.transactions).to eq expected_array
     end
   end
 end

@@ -19,13 +19,26 @@ module Statement
     end
 
     def handle_transaction(transaction, balance)
-      line = transaction.date.strftime('%d/%m/%Y') + ' || '
-      case transaction.type
-      when :deposit
-        line << "%<amt>.2f || || %<bal>.2f" % { amt: transaction.amount, bal: balance }
-      when :withdrawal
-        line << "|| %<amt>.2f || %<bal>.2f" % { amt: transaction.amount, bal: balance }
-      end
+      line = date_column(transaction)
+      line << credit_column(transaction)
+      line << debit_column(transaction)
+      line << balance_column(balance)
+    end
+
+    def date_column transaction
+      transaction.date.strftime('%d/%m/%Y') + ' || '
+    end
+
+    def credit_column transaction
+      (transaction.credit ? "%<credit>.2f " % { credit: transaction.credit } : '') + '|| '
+    end
+
+    def debit_column transaction
+      (transaction.debit ? "%<debit>.2f " % { debit: transaction.debit } : '') + '|| '
+    end
+
+    def balance_column balance
+      "%<balance>.2f" % { balance: balance }
     end
   end
 end

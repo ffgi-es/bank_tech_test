@@ -18,8 +18,8 @@ class Account
     @balance -= amount
   end
 
-  def statement
-    @statement_formatter.format(@transaction_log, @balance)
+  def print_statement
+    puts @statement_formatter.format(@transaction_log, @balance)
   end
 end
 

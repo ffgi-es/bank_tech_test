@@ -20,8 +20,8 @@ RSpec.describe 'depositing into account' do
 
     expected_statement = "date || credit || debit || balance\n"
     expected_statement << "19/08/2019 || 700.00 || || 1100.00\n"
-    expected_statement << "17/08/2019 || 400.00 || || 400.00"
+    expected_statement << "17/08/2019 || 400.00 || || 400.00\n"
 
-    expect(account.statement).to eq expected_statement
+    expect { account.print_statement }.to output(expected_statement).to_stdout
   end
 end

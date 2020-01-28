@@ -25,8 +25,8 @@ RSpec.describe 'withdrawing from account' do
     expected_statement = "date || credit || debit || balance\n"
     expected_statement << "17/05/2019 || || 700.00 || 1200.00\n"
     expected_statement << "13/05/2019 || || 400.00 || 1900.00\n"
-    expected_statement << "11/05/2019 || 2300.00 || || 2300.00"
+    expected_statement << "11/05/2019 || 2300.00 || || 2300.00\n"
 
-    expect(account.statement).to eq expected_statement
+    expect { account.print_statement }.to output(expected_statement).to_stdout
   end
 end

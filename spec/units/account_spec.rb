@@ -54,7 +54,7 @@ RSpec.describe Account do
 
       expect(statement_formatter).to receive(:format).with(transaction_log, 1000)
 
-      expect(subject.statement).to eq "Formatted statement"
+      expect { subject.print_statement }.to output(/Formatted statement/).to_stdout
     end
   end
 end

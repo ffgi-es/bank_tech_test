@@ -1,6 +1,6 @@
 require 'transaction'
 
-shared_examples 'a transaction' do
+shared_examples 'a transaction' do |type|
   describe '#amount' do
     it 'should return the amount involved in the transaction' do
       expect(subject.amount).to eq 100
@@ -12,13 +12,25 @@ shared_examples 'a transaction' do
       expect(subject.date).to eq Time.local(2019, 05, 13)
     end
   end
+
+  describe "erroneous transactions" do
+    it "should raise an error if a transaction has an amount of 0" do
+      expect { Transaction.new(type, 0, Time.local(2017, 03, 14)) }
+        .to raise_error InvalidTransactionError, "Transaction must be greater than 0"
+    end
+
+    it "should raise an error if a transaction has a negative amount" do
+      expect { Transaction.new(type, -1, Time.local(2017, 03, 14)) }
+        .to raise_error InvalidTransactionError, "Transaction must be greater than 0"
+    end
+  end
 end
 
 RSpec.describe Transaction do
   describe ':deposit' do
     subject { Transaction.new(:deposit, 100, Time.local(2019, 05, 13)) }
 
-    it_behaves_like 'a transaction'
+    it_behaves_like 'a transaction', :deposit
 
     describe "#type" do
       it "should return :deposit" do
@@ -42,7 +54,7 @@ RSpec.describe Transaction do
   describe ':withdrawal' do
     subject { Transaction.new(:withdrawal, 100, Time.local(2019, 05, 13)) }
 
-    it_behaves_like 'a transaction'
+    it_behaves_like 'a transaction', :withdrawal
 
     describe "#type" do
       it "should return withdrawal" do

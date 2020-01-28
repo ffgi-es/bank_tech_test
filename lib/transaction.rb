@@ -2,6 +2,8 @@ class Transaction
   attr_reader :type, :amount, :date
 
   def initialize(type, amount, date)
+    raise InvalidTransactionError, "Transaction must be greater than 0" if amount <= 0
+
     @type = type
     @amount = amount
     @date = date
@@ -20,4 +22,7 @@ class Transaction
     when :withdrawal then balance_after + amount
     end
   end
+end
+
+class InvalidTransactionError < StandardError
 end

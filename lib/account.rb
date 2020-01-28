@@ -1,26 +1,25 @@
 class Account
-  def initialize(transaction_class = Transaction, statement_formatter = Statement)
+  def initialize(statement_formatter = Statement, transaction_log = TransactionLog.new)
     @balance = 0
-    @transactions = []
+    @transaction_log = transaction_log
 
-    @transaction_class = transaction_class
     @statement_formatter = statement_formatter
   end
 
   def deposit amount
-    @transactions.unshift @transaction_class.new(:deposit, amount, Time.now)
+    @transaction_log.add_deposit amount
     @balance += amount
   end
 
   def withdraw amount
     raise AccountError, "Insufficient funds" if (@balance - amount).negative?
 
-    @transactions.unshift @transaction_class.new(:withdrawal, amount, Time.now)
+    @transaction_log.add_withdrawal amount
     @balance -= amount
   end
 
   def statement
-    @statement_formatter.format(@transactions, @balance)
+    @statement_formatter.format(@transaction_log, @balance)
   end
 end
 

@@ -1,11 +1,10 @@
 require 'account'
 
 RSpec.describe Account do
-  let(:transaction) { double :transaction }
-  let(:transaction_class) { double :transaction_class, new: transaction }
+  let(:transaction_log) { double :transaction_log, add_deposit: nil, add_withdrawal: nil }
   let(:statement_formatter) { double :statement_formatter, format: "Formatted statement" }
 
-  subject { Account.new transaction_class, statement_formatter }
+  subject { Account.new statement_formatter, transaction_log }
 
   describe '#deposit' do
     it "should return the current balance after 1 deposit" do
@@ -17,10 +16,9 @@ RSpec.describe Account do
       expect(subject.deposit(500)).to eq 800
     end
 
-    it "should be creating a deposit" do
-      Timecop.freeze Time.local(2017, 07, 29)
-
-      expect(transaction_class).to receive(:new).with(:deposit, 250, Time.local(2017, 07, 29))
+    it 'should add the deposit to the log' do
+      expect(transaction_log).to receive(:add_deposit)
+        .with(250)
       subject.deposit(250)
     end
   end
@@ -37,33 +35,24 @@ RSpec.describe Account do
       expect(subject.withdraw(500)).to eq 500
     end
 
-    it "should be creating a withdrawal" do
-      Timecop.freeze Time.local(2017, 07, 29)
-
-      expect(transaction_class).to receive(:new).with(:withdrawal, 250, Time.local(2017, 07, 29))
-      subject.withdraw(250)
-    end
-
     it "should raise an error if not enough money is available" do
       expect { subject.withdraw(1301) }.to raise_error AccountError, "Insufficient funds"
+    end
+
+    it 'should add the withdrawal to the log' do
+      expect(transaction_log).to receive(:add_withdrawal)
+        .with(250)
+      subject.withdraw(250)
     end
   end
 
   describe '#statement' do
     it 'should pass an array of transactions to the statement formatter' do
-      deposit_1 = double :deposit_1
-      allow(transaction_class).to receive(:new).and_return(deposit_1)
       subject.deposit(1300)
-
-      deposit_2 = double :deposit_2
-      allow(transaction_class).to receive(:new).and_return(deposit_2)
       subject.deposit(300)
-
-      withdrawal_1 = double :withdrawal_1
-      allow(transaction_class).to receive(:new).and_return(withdrawal_1)
       subject.withdraw(600)
 
-      expect(statement_formatter).to receive(:format).with([withdrawal_1, deposit_2, deposit_1], 1000)
+      expect(statement_formatter).to receive(:format).with(transaction_log, 1000)
 
       expect(subject.statement).to eq "Formatted statement"
     end

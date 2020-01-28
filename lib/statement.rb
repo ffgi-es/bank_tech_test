@@ -1,10 +1,10 @@
 module Statement
-  def Statement.format(transactions, balance)
-    return 'Statement unavailable: no transactions have occured' if transactions.empty?
+  def Statement.format(log, balance)
+    return 'Statement unavailable: no transactions have occured' if log.transactions.empty?
 
     statement = ["date || credit || debit || balance"]
 
-    transactions.reduce(statement) do |lines, transaction|
+    log.transactions.reduce(statement) do |lines, transaction|
       lines << handle_transaction(transaction, balance)
       balance = transaction.balance_before(balance)
       lines

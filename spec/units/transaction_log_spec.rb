@@ -3,12 +3,10 @@ require 'transaction_log'
 RSpec.describe TransactionLog do
   let(:transaction) { double :transaction }
   let(:transaction_class) { double :transaction_class, new: transaction }
+  let(:time) { double :time }
+  let(:time_class) { double :Time, now: time }
 
-  subject { TransactionLog.new(transaction_class) }
-
-  after do
-    Timecop.return
-  end
+  subject { TransactionLog.new(transaction_class, time_class) }
 
   describe '#add_deposit' do
     it 'should return a transaction' do
@@ -16,10 +14,8 @@ RSpec.describe TransactionLog do
     end
 
     it "should pass the correct details to create a transaction" do
-      Timecop.freeze Time.local(2017, 07, 29)
-
       expect(transaction_class).to receive(:new)
-        .with(:deposit, 250, Time.local(2017, 07, 29))
+        .with(:deposit, 250, time)
 
       subject.add_deposit(250)
     end
@@ -31,10 +27,8 @@ RSpec.describe TransactionLog do
     end
 
     it "should be creating a withdrawal" do
-      Timecop.freeze Time.local(2017, 07, 29)
-
       expect(transaction_class).to receive(:new)
-        .with(:withdrawal, 250, Time.local(2017, 07, 29))
+        .with(:withdrawal, 250, time)
 
       subject.add_withdrawal(250)
     end

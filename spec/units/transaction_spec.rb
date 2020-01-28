@@ -9,26 +9,28 @@ shared_examples 'a transaction' do |type|
 
   describe '#date' do
     it 'should return the date the transaction occured' do
-      expect(subject.date).to eq Time.local(2019, 05, 13)
+      expect(subject.date).to eq time
     end
   end
 
   describe "erroneous transactions" do
     it "should raise an error if a transaction has an amount of 0" do
-      expect { Transaction.new(type, 0, Time.local(2017, 03, 14)) }
+      expect { Transaction.new(type, 0, time) }
         .to raise_error InvalidTransactionError, "Transaction must be greater than 0"
     end
 
     it "should raise an error if a transaction has a negative amount" do
-      expect { Transaction.new(type, -1, Time.local(2017, 03, 14)) }
+      expect { Transaction.new(type, -1, time) }
         .to raise_error InvalidTransactionError, "Transaction must be greater than 0"
     end
   end
 end
 
 RSpec.describe Transaction do
+  let(:time) { double :time }
+
   describe ':deposit' do
-    subject { Transaction.new(:deposit, 100, Time.local(2019, 05, 13)) }
+    subject { Transaction.new(:deposit, 100, time) }
 
     it_behaves_like 'a transaction', :deposit
 
@@ -52,7 +54,7 @@ RSpec.describe Transaction do
   end
 
   describe ':withdrawal' do
-    subject { Transaction.new(:withdrawal, 100, Time.local(2019, 05, 13)) }
+    subject { Transaction.new(:withdrawal, 100, time) }
 
     it_behaves_like 'a transaction', :withdrawal
 

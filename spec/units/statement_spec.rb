@@ -3,15 +3,18 @@ require 'statement'
 RSpec.describe Statement do
   describe ".format" do
     let(:deposit_1) do
-      double(:deposit_1, type: :deposit, amount: 1000, date: Time.local(2019, 05, 03),
+      double(:deposit_1, type: :deposit, amount: 1000,
+             date: double(:time_1, strftime: '03/05/2019'),
              balance_before: 0)
     end
     let(:deposit_2) do
-      double(:deposit_2, type: :deposit, amount: 2000, date: Time.local(2019, 05, 13),
+      double(:deposit_2, type: :deposit, amount: 2000, 
+             date: double(:time_2, strftime: '13/05/2019'),
              balance_before: 1000) 
     end
     let(:withdrawal_1) do
-      double(:withdrawal_1, type: :withdrawal, amount: 500, date: Time.local(2019, 05, 14),
+      double(:withdrawal_1, type: :withdrawal, amount: 500, 
+             date: double(:time_3, strftime: '14/05/2019'),
              balance_before: 3000) 
     end
     let(:log) { double :transaction_log, transactions: [] }

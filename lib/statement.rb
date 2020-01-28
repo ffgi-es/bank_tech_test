@@ -19,7 +19,7 @@ module Statement
     end
 
     def handle_transaction(transaction, balance)
-      line = transaction.date.strftime('%d/%m/%Y || ')
+      line = transaction.date.strftime('%d/%m/%Y') + ' || '
       case transaction.type
       when :deposit
         line << "%<amt>.2f || || %<bal>.2f" % { amt: transaction.amount, bal: balance }

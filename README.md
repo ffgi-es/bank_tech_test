@@ -45,7 +45,7 @@ $ irb
 => 1245.77
 2.6.5 :005 > account.withdraw(220)
 => 1025.77
-2.6.5 :006 > puts account.statement
+2.6.5 :006 > account.print_statement
 date || credit || debit || balance
 28/01/2020 || || 220.00 || 1025.77
 28/01/2020 || || 54.23 || 1245.77
@@ -65,6 +65,8 @@ This solution has 4 separate parts:
 | Account | Tracks the current balance (what the user interacts with) |
 | TransactionLog | Stores a log of transactions |
 | Transaction | Holds a single transaction's information |
+| Deposit | Inherits Transaction, defines methods specfic for deposit |
+| Withdrawal | Inherits Transactoin, defines methods specific for witdrawal |
 | Statement | Takes a TransactionLog and current balance and returns a formatted statement string |
 
 ## Specification

@@ -2,17 +2,21 @@ module Statement
   def Statement.format(log, balance)
     return 'Statement unavailable: no transactions have occured' if log.transactions.empty?
 
-    statement = ["date || credit || debit || balance"]
+    statement = ["date || credit || debit || balance"] + process(log, balance)
 
-    log.transactions.reduce(statement) do |lines, transaction|
-      lines << handle_transaction(transaction, balance)
-      balance = transaction.balance_before(balance)
-      lines
-    end.join("\n")
+    statement.join("\n")
   end
 
   class << self
     private
+
+    def process(log, balance)
+      log.transactions.reduce([]) do |lines, transaction|
+        lines << handle_transaction(transaction, balance)
+        balance = transaction.balance_before(balance)
+        lines
+      end
+    end
 
     def handle_transaction(transaction, balance)
       line = transaction.date.strftime('%d/%m/%Y || ')
